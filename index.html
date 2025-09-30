@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Tebak Komponen Komputer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom, #87ceeb, #ffffff); /* Langit biru muda */
+      color: #333;
+      padding: 50px;
+      overflow: hidden;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 30px;
+      margin-bottom: 20px;
+      color: #002244;
+      text-shadow: 2px 2px 5px #fff;
+    }
+    .question {
+      font-size: 22px;
+      margin: 20px 0;
+      color: #001122;
+    }
+    .choices button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #ff9933;
+      color: #fff;
+      transition: 0.3s;
+      box-shadow: 2px 2px 6px #000;
+    }
+    .choices button:hover {
+      background: #ff6600;
+      transform: scale(1.1);
+    }
+    #result {
+      font-size: 26px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #000;
+      text-shadow: 1px 1px 3px #fff;
+    }
+    /* Daun gugur */
+    .leaf {
+      position: fixed;
+      top: -50px;
+      width: 40px;
+      height: 40px;
+      background-image: url('https://i.ibb.co/3cfjK2C/leaf.png');
+      background-size: cover;
+      opacity: 0.9;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🍂 Game Tebak Komponen Komputer 🍂</h1>
+  <div class="question" id="question">Apa fungsi dari CPU?</div>
+  <div class="choices" id="choices"></div>
+  <div id="result"></div>
+
+  <script>
+    const quiz = [
+      { question: "Apa fungsi dari CPU?", choices: ["Menjalankan komputer sebagai otaknya", "Menyimpan data", "Menampilkan gambar"], answer: "Menjalankan komputer sebagai otaknya" },
+      { question: "Komponen apa yang berfungsi menyimpan data permanen?", choices: ["RAM", "Harddisk/SSD", "Monitor"], answer: "Harddisk/SSD" },
+      { question: "Komponen komputer yang menampilkan gambar adalah?", choices: ["Keyboard", "Monitor", "Power Supply"], answer: "Monitor" },
+      { question: "Komponen yang memberikan daya listrik pada komputer?", choices: ["VGA", "Power Supply", "Motherboard"], answer: "Power Supply" },
+      { question: "RAM digunakan untuk?", choices: ["Menyimpan sementara", "Mengolah data", "Memberi listrik"], answer: "Menyimpan sementara" },
+      { question: "Komponen yang menjadi papan utama untuk semua perangkat komputer?", choices: ["Motherboard", "CPU", "Power Supply"], answer: "Motherboard" },
+      { question: "Komponen yang digunakan untuk menampilkan grafik lebih baik?", choices: ["Harddisk", "VGA/Graphics Card", "RAM"], answer: "VGA/Graphics Card" },
+      { question: "Alat input untuk mengetik huruf dan angka?", choices: ["Mouse", "Keyboard", "Monitor"], answer: "Keyboard" },
+      { question: "Perangkat input untuk menggerakkan pointer di layar?", choices: ["Printer", "Mouse", "Speaker"], answer: "Mouse" },
+      { question: "Perangkat yang digunakan untuk mencetak dokumen ke kertas?", choices: ["Scanner", "Printer", "Speaker"], answer: "Printer" },
+      { question: "Perangkat yang digunakan untuk mengubah dokumen fisik menjadi digital?", choices: ["Speaker", "Scanner", "Keyboard"], answer: "Scanner" },
+      { question: "Komponen pendingin pada komputer untuk menjaga suhu tetap stabil?", choices: ["Heatsink/Fan", "Harddisk", "Monitor"], answer: "Heatsink/Fan" },
+      { question: "Perangkat penyimpanan data berbentuk kecil dan portabel?", choices: ["Flashdisk", "Motherboard", "Monitor"], answer: "Flashdisk" },
+      { question: "Perangkat untuk mendengar suara dari komputer?", choices: ["Speaker", "Printer", "Mouse"], answer: "Speaker" },
+      { question: "Komponen baterai kecil pada motherboard yang menyimpan waktu & BIOS?", choices: ["Baterai CMOS", "Power Supply", "VGA"], answer: "Baterai CMOS" }
+    ];
+
+    let currentQuestion = 0;
+
+    function loadQuestion() {
+      document.getElementById("result").innerHTML = "";
+      let q = quiz[currentQuestion];
+      document.getElementById("question").innerText = q.question;
+      let choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+      q.choices.forEach(choice => {
+        let btn = document.createElement("button");
+        btn.innerText = choice;
+        btn.onclick = () => checkAnswer(choice);
+        choicesDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(answer) {
+      let q = quiz[currentQuestion];
+      if (answer === q.answer) {
+        document.getElementById("result").innerHTML = "✅ BENAR!";
+        setTimeout(() => {
+          currentQuestion++;
+          if (currentQuestion < quiz.length) {
+            loadQuestion();
+          } else {
+            document.getElementById("question").innerText = "🎉 Selamat, semua pertanyaan selesai!";
+            document.getElementById("choices").innerHTML = "";
+            document.getElementById("result").innerHTML = "Kamu hebat!";
+          }
+        }, 1200);
+      } else {
+        document.getElementById("result").innerHTML = "❌ SALAH, coba lagi!";
+      }
+    }
+
+    // Daun jatuh jadi background
+    function createLeaf() {
+      const leaf = document.createElement("div");
+      leaf.classList.add("leaf");
+      leaf.style.left = Math.random() * window.innerWidth + "px";
+      leaf.style.width = 20 + Math.random() * 40 + "px";  
+      leaf.style.height = leaf.style.width;
+      leaf.style.animationDuration = (3 + Math.random() * 6) + "s"; 
+      document.body.appendChild(leaf);
+
+      setTimeout(() => { leaf.remove(); }, 9000);
+    }
+
+    setInterval(createLeaf, 150); // lebih rapat biar jadi background penuh daun
+
+    loadQuestion();
+  </script>
+</body>
+</html>
